@@ -1,0 +1,377 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0a0a1a;
+  color: #f0e6d3;
+  font-family: 'Georgia', 'Segoe UI', serif;
+  line-height: 1.8;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ✨ Magical Background Stars */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 50px 160px, #ddd, transparent),
+    radial-gradient(2px 2px at 90px 40px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(2px 2px at 130px 80px, #fff, transparent),
+    radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.7), transparent);
+  background-size: 200px 200px;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+  animation: twinkleStars 4s ease-in-out infinite alternate;
+}
+
+@keyframes twinkleStars {
+  0% { opacity: 0.2; }
+  100% { opacity: 0.6; }
+}
+
+/* ✨ Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a1a;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #e9c46a, #f4a261, #e76f51);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(233, 196, 106, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #f4a261, #e76f51, #e9c46a);
+}
+
+/* ✨ Container with magical glow */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ✨ Section Cards - Magical Glass Effect */
+.section-card {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  margin: 2.5rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ✨ Section Card Glow Effect */
+.section-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(244, 162, 97, 0.02), transparent 60%);
+  pointer-events: none;
+  animation: rotateGlow 20s linear infinite;
+}
+
+/* ✨ Section Card Hover */
+.section-card:hover {
+  border-color: rgba(244, 162, 97, 0.1);
+  box-shadow: 
+    0 8px 40px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(244, 162, 97, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+@keyframes rotateGlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ✨ Titles with Magical Glow */
+.section-title {
+  color: #e9c46a;
+  font-weight: 300;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  text-align: center;
+  margin-bottom: 0.5rem;
+  letter-spacing: 3px;
+  text-shadow: 
+    0 0 30px rgba(233, 196, 106, 0.1),
+    0 0 60px rgba(233, 196, 106, 0.05);
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+/* ✨ Title Underline Sparkle */
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #e9c46a, transparent);
+  animation: sparkleLine 3s ease-in-out infinite;
+}
+
+@keyframes sparkleLine {
+  0%, 100% { width: 60px; opacity: 0.3; }
+  50% { width: 120px; opacity: 1; }
+}
+
+.section-subtitle {
+  color: #888;
+  text-align: center;
+  font-weight: 300;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+/* ✨ Big Emojis with Float */
+.emoji-big {
+  font-size: 3rem;
+  display: block;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  animation: floatEmoji 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 20px rgba(233, 196, 106, 0.1));
+}
+
+@keyframes floatEmoji {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-8px) scale(1.05); }
+}
+
+/* ✨ Magical Fade Up Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ✨ Enhanced Glow Text */
+@keyframes glow {
+  0%, 100% { 
+    text-shadow: 
+      0 0 20px rgba(244, 162, 97, 0.1),
+      0 0 40px rgba(244, 162, 97, 0.05); 
+  }
+  50% { 
+    text-shadow: 
+      0 0 40px rgba(244, 162, 97, 0.2),
+      0 0 80px rgba(244, 162, 97, 0.1),
+      0 0 120px rgba(244, 162, 97, 0.05); 
+  }
+}
+
+.glow-text {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* ✨ Confetti Animation */
+@keyframes confettiFall {
+  0% { 
+    transform: translateY(-10vh) rotate(0deg) scale(1); 
+    opacity: 1; 
+  }
+  100% { 
+    transform: translateY(110vh) rotate(720deg) scale(0.5); 
+    opacity: 0; 
+  }
+}
+
+/* ✨ Magical Particle Animation */
+@keyframes floatParticle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 0.8;
+  }
+}
+
+/* ✨ Button Hover Glow */
+.magical-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.magical-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.03),
+    transparent
+  );
+  transform: rotate(45deg);
+  animation: shimmerBtn 3s infinite;
+}
+
+@keyframes shimmerBtn {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+
+/* ✨ Sparkle Divider */
+.divider-sparkle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  opacity: 0.3;
+}
+
+.divider-sparkle span {
+  font-size: 0.8rem;
+  color: #e9c46a;
+  animation: sparklePulse 2s ease-in-out infinite;
+}
+
+.divider-sparkle span:nth-child(2) { animation-delay: 0.3s; }
+.divider-sparkle span:nth-child(3) { animation-delay: 0.6s; }
+.divider-sparkle span:nth-child(4) { animation-delay: 0.9s; }
+
+@keyframes sparklePulse {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* ✨ Magical Border Glow */
+.glow-border {
+  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.glow-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #e9c46a, #f4a261, #e76f51, #f4a261, #e9c46a);
+  background-size: 300% 300%;
+  z-index: -1;
+  animation: gradientBorder 4s ease-in-out infinite;
+  opacity: 0.3;
+}
+
+@keyframes gradientBorder {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ✨ Responsive Magic */
+@media (max-width: 600px) {
+  .section-card {
+    padding: 1.8rem 1.2rem;
+    border-radius: 18px;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+  
+  .section-title::after {
+    width: 40px;
+  }
+  
+  .emoji-big {
+    font-size: 2.5rem;
+  }
+}
+
+/* ✨ Smooth Loading */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease forwards;
+}
+
+/* ✨ Magical Hover Scale */
+.hover-scale {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* ✨ Glow Pulse Ring */
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 20px rgba(233, 196, 106, 0.1), 0 0 40px rgba(233, 196, 106, 0.05); }
+  50% { box-shadow: 0 0 40px rgba(233, 196, 106, 0.2), 0 0 80px rgba(233, 196, 106, 0.1), 0 0 120px rgba(233, 196, 106, 0.05); }
+  100% { box-shadow: 0 0 20px rgba(233, 196, 106, 0.1), 0 0 40px rgba(233, 196, 106, 0.05); }
+}
+
+.glow-pulse {
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+/* ✨ Text Shadow Magic */
+.magic-text {
+  background: linear-gradient(135deg, #e9c46a, #f4a261, #e76f51, #f4a261, #e9c46a);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 4s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
