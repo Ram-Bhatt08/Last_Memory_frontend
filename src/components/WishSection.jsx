@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://last-memory-backend.onrender.com/api';
 
 const WishSection = () => {
   const { ref, inView } = useInView({
