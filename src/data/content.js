@@ -205,7 +205,6 @@ Hamesa khush rahena and kabhi bhul mat jana Miss you. 
     { id: 79, url: "/photos/79.jpeg", caption: "Tum aur tumara kittu" },
     // { id: 80, url: "/photos/80.jpeg", caption: "Tummara last group hostel ka" },
     { id: 81, url: "/photos/81.jpeg", caption: "Hostel life ki happy ending and good memories" }
->>>>>>> 62f7e21 (Remove Public)
   ],
 
   promises: [
