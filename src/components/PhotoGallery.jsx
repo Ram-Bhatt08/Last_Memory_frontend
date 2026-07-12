@@ -62,6 +62,28 @@ const PhotoGallery = ({ photos }) => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [selectedPhoto]);
 
+  // Responsive grid columns based on screen size
+  const getGridColumns = () => {
+    if (typeof window !== 'undefined') {
+      const width = window.innerWidth;
+      if (width < 480) return 'repeat(auto-fill, minmax(140px, 1fr))';
+      if (width < 768) return 'repeat(auto-fill, minmax(160px, 1fr))';
+      if (width < 1024) return 'repeat(auto-fill, minmax(180px, 1fr))';
+      return 'repeat(auto-fill, minmax(200px, 1fr))';
+    }
+    return 'repeat(auto-fill, minmax(170px, 1fr))';
+  };
+
+  const [gridColumns, setGridColumns] = useState(getGridColumns());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setGridColumns(getGridColumns());
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <>
       <motion.div
@@ -70,17 +92,17 @@ const PhotoGallery = ({ photos }) => {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8 }}
         style={{
-          maxWidth: '1000px',
-          margin: '3rem auto',
-          padding: '0 1rem',
+          maxWidth: 'min(1000px, 95%)',
+          margin: '2rem auto',
+          padding: '0 0.8rem',
         }}
       >
         <div
           style={{
             background: 'rgba(255, 255, 255, 0.02)',
             border: '1px solid rgba(255, 255, 255, 0.04)',
-            borderRadius: '24px',
-            padding: '2.5rem 2rem',
+            borderRadius: 'clamp(16px, 3vw, 24px)',
+            padding: 'clamp(1.2rem, 4vw, 2.5rem) clamp(0.8rem, 3vw, 2rem)',
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -99,32 +121,38 @@ const PhotoGallery = ({ photos }) => {
             }}
           />
 
-          {/* Header with Animation */}
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2, type: 'spring' }}
             style={{ textAlign: 'center' }}
           >
-            <div style={{ fontSize: '3.5rem', marginBottom: '0.5rem' }}>🎂</div>
+            <div style={{ 
+              fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', 
+              marginBottom: '0.5rem' 
+            }}>
+              🎂
+            </div>
             <h2
               style={{
                 color: '#e9c46a',
                 fontWeight: 300,
-                fontSize: '18px',
+                fontSize: 'clamp(0.8rem, 2vw, 1.1rem)',
                 marginBottom: '0.3rem',
-                letterSpacing: '2px',
+                letterSpacing: 'clamp(1px, 0.2vw, 2px)',
                 textShadow: '0 0 40px rgba(233, 196, 106, 0.1)',
-                lineHeight: 1.4,
+                lineHeight: 1.6,
+                padding: '0 0.5rem',
               }}
             >
-            Biharan Ye sab bas photos nahi hai tumre sath k wo anmol pal hai jo hamesha yaad rahenge.Yes mai kuch aache yaade hai kuch buri yaade hai lekin har yaad bhaut anmol hai. 
+              Biharan Ye sab bas photos nahi hai tumre sath k wo anmol pal hai jo hamesha yaad rahenge.Yes mai kuch aache yaade hai kuch buri yaade hai lekin har yaad bhaut anmol hai.
             </h2>
             <p
               style={{
                 color: '#888',
-                fontSize: '1rem',
-                marginBottom: '2rem',
+                fontSize: 'clamp(0.75rem, 1.8vw, 1rem)',
+                marginBottom: 'clamp(1rem, 3vw, 2rem)',
                 fontWeight: 300,
               }}
             >
@@ -132,7 +160,7 @@ const PhotoGallery = ({ photos }) => {
             </p>
           </motion.div>
 
-          {/* Featured/Highlight Image - Carousel */}
+          {/* Featured Image - Carousel */}
           {inView && photos.length > 0 && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -142,8 +170,8 @@ const PhotoGallery = ({ photos }) => {
                 position: 'relative',
                 borderRadius: '16px',
                 overflow: 'hidden',
-                marginBottom: '2rem',
-                height: '280px',
+                marginBottom: 'clamp(1rem, 3vw, 2rem)',
+                height: 'clamp(180px, 40vw, 280px)',
                 cursor: 'pointer',
                 background: 'rgba(255,255,255,0.05)',
                 border: '1px solid rgba(255,255,255,0.04)',
@@ -185,18 +213,19 @@ const PhotoGallery = ({ photos }) => {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  padding: '2rem 1.5rem 1.5rem',
+                  padding: 'clamp(1rem, 3vw, 2rem) clamp(0.8rem, 2vw, 1.5rem) clamp(0.8rem, 2vw, 1.5rem)',
                   background: 'linear-gradient(transparent, rgba(0,0,0,0.8))',
                 }}
               >
                 <p
                   style={{
                     color: '#f0e6d3',
-                    fontSize: '0.95rem',
+                    fontSize: 'clamp(0.7rem, 1.6vw, 0.95rem)',
                     fontWeight: 300,
                     letterSpacing: '1px',
                     fontFamily: '"Georgia", serif',
                     fontStyle: 'italic',
+                    margin: 0,
                   }}
                 >
                   💌 {photos[currentIndex].caption || '✨ A beautiful memory ✨'}
@@ -204,7 +233,7 @@ const PhotoGallery = ({ photos }) => {
                 <p
                   style={{
                     color: 'rgba(255,255,255,0.3)',
-                    fontSize: '0.7rem',
+                    fontSize: 'clamp(0.5rem, 1.2vw, 0.7rem)',
                     marginTop: '0.3rem',
                     letterSpacing: '2px',
                   }}
@@ -213,14 +242,17 @@ const PhotoGallery = ({ photos }) => {
                 </p>
               </div>
 
-              {/* Navigation dots on carousel */}
+              {/* Navigation dots */}
               <div
                 style={{
                   position: 'absolute',
-                  bottom: '15px',
-                  right: '15px',
+                  bottom: 'clamp(10px, 2vw, 15px)',
+                  right: 'clamp(10px, 2vw, 15px)',
                   display: 'flex',
                   gap: '6px',
+                  flexWrap: 'wrap',
+                  maxWidth: '70%',
+                  justifyContent: 'flex-end',
                 }}
               >
                 {photos.slice(0, 6).map((_, i) => (
@@ -231,30 +263,31 @@ const PhotoGallery = ({ photos }) => {
                       setCurrentIndex(i);
                     }}
                     style={{
-                      width: '8px',
-                      height: '8px',
+                      width: 'clamp(6px, 1.2vw, 8px)',
+                      height: 'clamp(6px, 1.2vw, 8px)',
                       borderRadius: '50%',
                       border: 'none',
                       background: currentIndex === i ? '#e9c46a' : 'rgba(255,255,255,0.2)',
                       cursor: 'pointer',
                       transition: 'all 0.3s ease',
                       padding: 0,
+                      flexShrink: 0,
                     }}
                   />
                 ))}
                 {photos.length > 6 && (
-                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.6rem' }}>...</span>
+                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 'clamp(0.5rem, 1vw, 0.6rem)' }}>...</span>
                 )}
               </div>
             </motion.div>
           )}
 
-          {/* Photo Grid with Stagger Animation */}
+          {/* Photo Grid */}
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))',
-              gap: '1.2rem',
+              gridTemplateColumns: gridColumns,
+              gap: 'clamp(0.8rem, 2vw, 1.2rem)',
             }}
           >
             {photos.map((photo, index) => {
@@ -283,7 +316,7 @@ const PhotoGallery = ({ photos }) => {
                   onHoverEnd={() => setHoveredId(null)}
                   onClick={() => openModal(photo, index)}
                   style={{
-                    borderRadius: '16px',
+                    borderRadius: 'clamp(12px, 1.5vw, 16px)',
                     overflow: 'hidden',
                     cursor: 'pointer',
                     background: 'rgba(255,255,255,0.03)',
@@ -306,8 +339,8 @@ const PhotoGallery = ({ photos }) => {
                     width: '100%',
                     backgroundColor: 'rgba(255,255,255,0.02)',
                     overflow: 'hidden',
-                    minHeight: '150px',
-                    maxHeight: '250px',
+                    minHeight: 'clamp(120px, 25vw, 150px)',
+                    maxHeight: 'clamp(180px, 35vw, 250px)',
                   }}>
                     {!hasError ? (
                       <img
@@ -315,8 +348,7 @@ const PhotoGallery = ({ photos }) => {
                         alt={`Memory ${index + 1}`}
                         style={{
                           width: '100%',
-                          height: 'auto',
-                          maxHeight: '250px',
+                          height: '100%',
                           objectFit: 'contain',
                           display: 'block',
                           transition: 'transform 0.5s ease',
@@ -330,20 +362,20 @@ const PhotoGallery = ({ photos }) => {
                         style={{
                           width: '100%',
                           height: '100%',
-                          minHeight: '150px',
+                          minHeight: 'clamp(120px, 25vw, 150px)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           background: 'rgba(255,255,255,0.03)',
                           color: '#444',
-                          fontSize: '2rem',
+                          fontSize: 'clamp(1.5rem, 4vw, 2rem)',
                         }}
                       >
                         🖼️
                       </div>
                     )}
 
-                    {/* Hover overlay with number */}
+                    {/* Hover overlay */}
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: isHovered ? 1 : 0 }}
@@ -365,7 +397,7 @@ const PhotoGallery = ({ photos }) => {
                       <span
                         style={{
                           color: '#fff',
-                          fontSize: '2rem',
+                          fontSize: 'clamp(1.5rem, 4vw, 2rem)',
                           fontWeight: 300,
                           textShadow: '0 4px 20px rgba(0,0,0,0.5)',
                         }}
@@ -378,17 +410,17 @@ const PhotoGallery = ({ photos }) => {
                     <div
                       style={{
                         position: 'absolute',
-                        top: '8px',
-                        right: '8px',
+                        top: 'clamp(4px, 1vw, 8px)',
+                        right: 'clamp(4px, 1vw, 8px)',
                         background: 'rgba(0,0,0,0.5)',
                         backdropFilter: 'blur(10px)',
                         borderRadius: '50%',
-                        width: '24px',
-                        height: '24px',
+                        width: 'clamp(20px, 3vw, 24px)',
+                        height: 'clamp(20px, 3vw, 24px)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '0.6rem',
+                        fontSize: 'clamp(0.5rem, 1.2vw, 0.6rem)',
                         color: 'rgba(255,255,255,0.7)',
                         fontWeight: 300,
                         border: '1px solid rgba(255,255,255,0.05)',
@@ -398,7 +430,7 @@ const PhotoGallery = ({ photos }) => {
                       {index + 1}
                     </div>
 
-                    {/* Sparkle effect on hover */}
+                    {/* Sparkle effect */}
                     {isHovered && (
                       <motion.div
                         initial={{ scale: 0 }}
@@ -407,7 +439,7 @@ const PhotoGallery = ({ photos }) => {
                           position: 'absolute',
                           top: '-10px',
                           right: '-10px',
-                          fontSize: '1.5rem',
+                          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
                           pointerEvents: 'none',
                         }}
                       >
@@ -416,14 +448,14 @@ const PhotoGallery = ({ photos }) => {
                     )}
                   </div>
 
-                  {/* ===== CAPTION BELOW IMAGE ===== */}
+                  {/* Caption Below Image */}
                   <div
                     style={{
-                      padding: '0.7rem 0.8rem',
+                      padding: 'clamp(0.4rem, 1.2vw, 0.7rem) clamp(0.4rem, 1.2vw, 0.8rem)',
                       background: 'rgba(0,0,0,0.3)',
                       backdropFilter: 'blur(10px)',
                       borderTop: '1px solid rgba(255,255,255,0.03)',
-                      minHeight: '50px',
+                      minHeight: 'clamp(40px, 10vw, 50px)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -433,7 +465,7 @@ const PhotoGallery = ({ photos }) => {
                     <p
                       style={{
                         color: isHovered ? '#e9c46a' : '#d4cbc4',
-                        fontSize: '0.75rem',
+                        fontSize: 'clamp(0.6rem, 1.4vw, 0.75rem)',
                         fontWeight: 300,
                         textAlign: 'center',
                         fontFamily: '"Georgia", serif',
@@ -458,9 +490,9 @@ const PhotoGallery = ({ photos }) => {
           <p
             style={{
               color: '#555',
-              fontSize: '0.85rem',
+              fontSize: 'clamp(0.7rem, 1.6vw, 0.85rem)',
               textAlign: 'center',
-              marginTop: '1.5rem',
+              marginTop: 'clamp(1rem, 3vw, 1.5rem)',
               fontWeight: 300,
               letterSpacing: '1px',
             }}
@@ -473,11 +505,17 @@ const PhotoGallery = ({ photos }) => {
               0% { transform: rotate(0deg); }
               100% { transform: rotate(360deg); }
             }
+            
+            @media (max-width: 480px) {
+              .modal-image {
+                max-height: 50vh !important;
+              }
+            }
           `}</style>
         </div>
       </motion.div>
 
-      {/* ✨ Enhanced Modal with Navigation & Caption ✨ */}
+      {/* Modal */}
       <AnimatePresence>
         {selectedPhoto && (
           <motion.div
@@ -498,7 +536,7 @@ const PhotoGallery = ({ photos }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '2rem',
+              padding: 'clamp(0.5rem, 2vw, 2rem)',
               cursor: 'pointer',
             }}
           >
@@ -507,16 +545,16 @@ const PhotoGallery = ({ photos }) => {
               onClick={closeModal}
               style={{
                 position: 'absolute',
-                top: '20px',
-                right: '20px',
+                top: 'clamp(10px, 3vw, 20px)',
+                right: 'clamp(10px, 3vw, 20px)',
                 zIndex: 10001,
                 background: 'rgba(255,255,255,0.05)',
                 border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '50%',
-                width: '50px',
-                height: '50px',
+                width: 'clamp(40px, 6vw, 50px)',
+                height: 'clamp(40px, 6vw, 50px)',
                 color: '#fff',
-                fontSize: '1.5rem',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -540,18 +578,22 @@ const PhotoGallery = ({ photos }) => {
             <div
               style={{
                 position: 'absolute',
-                top: '20px',
+                top: 'clamp(10px, 3vw, 20px)',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 color: '#666',
-                fontSize: '0.9rem',
+                fontSize: 'clamp(0.7rem, 1.6vw, 0.9rem)',
                 fontWeight: 300,
                 letterSpacing: '2px',
                 background: 'rgba(0,0,0,0.5)',
-                padding: '0.3rem 1.5rem',
+                padding: 'clamp(0.2rem, 1vw, 0.3rem) clamp(0.8rem, 2vw, 1.5rem)',
                 borderRadius: '50px',
                 backdropFilter: 'blur(10px)',
                 border: '1px solid rgba(255,255,255,0.03)',
+                whiteSpace: 'nowrap',
+                maxWidth: '90%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
             >
               🎂 {selectedPhoto.index + 1} / {photos.length}
@@ -565,10 +607,10 @@ const PhotoGallery = ({ photos }) => {
               transition={{ type: 'spring', damping: 25 }}
               onClick={(e) => e.stopPropagation()}
               style={{
-                maxWidth: '600px',
+                maxWidth: 'min(600px, 95vw)',
                 width: '100%',
-                maxHeight: '80vh',
-                borderRadius: '20px',
+                maxHeight: 'min(80vh, 90vh)',
+                borderRadius: 'clamp(16px, 2vw, 20px)',
                 overflow: 'hidden',
                 background: '#1a1a2e',
                 border: '1px solid rgba(244, 162, 97, 0.1)',
@@ -581,10 +623,11 @@ const PhotoGallery = ({ photos }) => {
                   key={selectedPhoto.id}
                   src={selectedPhoto.url}
                   alt={`Memory ${selectedPhoto.index + 1}`}
+                  className="modal-image"
                   style={{
                     width: '100%',
                     height: 'auto',
-                    maxHeight: '60vh',
+                    maxHeight: 'min(55vh, 70vh)',
                     objectFit: 'contain',
                     display: 'block',
                     background: '#0a0a1a',
@@ -594,22 +637,22 @@ const PhotoGallery = ({ photos }) => {
               ) : (
                 <div style={{
                   width: '100%',
-                  height: '60vh',
+                  height: 'min(50vh, 60vh)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   background: '#0a0a1a',
                   color: '#666',
-                  fontSize: '4rem',
+                  fontSize: 'clamp(3rem, 8vw, 4rem)',
                 }}>
                   🖼️
                 </div>
               )}
 
-              {/* ===== CAPTION IN MODAL ===== */}
+              {/* Caption in Modal */}
               <div
                 style={{
-                  padding: '1rem 1.5rem',
+                  padding: 'clamp(0.8rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem)',
                   background: 'rgba(0,0,0,0.5)',
                   backdropFilter: 'blur(10px)',
                   borderTop: '1px solid rgba(255,255,255,0.03)',
@@ -619,7 +662,7 @@ const PhotoGallery = ({ photos }) => {
                 <p
                   style={{
                     color: '#e9c46a',
-                    fontSize: '1rem',
+                    fontSize: 'clamp(0.8rem, 2vw, 1rem)',
                     fontWeight: 300,
                     fontFamily: '"Georgia", serif',
                     fontStyle: 'italic',
@@ -639,17 +682,17 @@ const PhotoGallery = ({ photos }) => {
                 }}
                 style={{
                   position: 'absolute',
-                  left: '10px',
+                  left: 'clamp(5px, 1.5vw, 10px)',
                   top: '50%',
                   transform: 'translateY(-50%)',
                   background: 'rgba(0,0,0,0.5)',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255,255,255,0.05)',
                   borderRadius: '50%',
-                  width: '45px',
-                  height: '45px',
+                  width: 'clamp(35px, 6vw, 45px)',
+                  height: 'clamp(35px, 6vw, 45px)',
                   color: '#fff',
-                  fontSize: '1.2rem',
+                  fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -675,17 +718,17 @@ const PhotoGallery = ({ photos }) => {
                 }}
                 style={{
                   position: 'absolute',
-                  right: '10px',
+                  right: 'clamp(5px, 1.5vw, 10px)',
                   top: '50%',
                   transform: 'translateY(-50%)',
                   background: 'rgba(0,0,0,0.5)',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255,255,255,0.05)',
                   borderRadius: '50%',
-                  width: '45px',
-                  height: '45px',
+                  width: 'clamp(35px, 6vw, 45px)',
+                  height: 'clamp(35px, 6vw, 45px)',
                   color: '#fff',
-                  fontSize: '1.2rem',
+                  fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -707,19 +750,21 @@ const PhotoGallery = ({ photos }) => {
               {/* Bottom controls */}
               <div
                 style={{
-                  padding: '0.8rem 1.5rem',
+                  padding: 'clamp(0.5rem, 1.5vw, 0.8rem) clamp(1rem, 2vw, 1.5rem)',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   borderTop: '1px solid rgba(255,255,255,0.03)',
                   background: 'rgba(0,0,0,0.3)',
                   backdropFilter: 'blur(10px)',
+                  flexWrap: 'wrap',
+                  gap: '0.5rem',
                 }}
               >
                 <span
                   style={{
                     color: '#666',
-                    fontSize: '0.85rem',
+                    fontSize: 'clamp(0.7rem, 1.4vw, 0.85rem)',
                     fontWeight: 300,
                   }}
                 >
@@ -728,15 +773,16 @@ const PhotoGallery = ({ photos }) => {
                 <button
                   onClick={closeModal}
                   style={{
-                    padding: '0.3rem 2rem',
+                    padding: 'clamp(0.2rem, 1vw, 0.3rem) clamp(1rem, 3vw, 2rem)',
                     background: 'rgba(244, 162, 97, 0.1)',
                     border: '1px solid rgba(244, 162, 97, 0.2)',
                     borderRadius: '50px',
                     color: '#f4a261',
                     cursor: 'pointer',
                     fontFamily: 'inherit',
-                    fontSize: '0.85rem',
+                    fontSize: 'clamp(0.7rem, 1.4vw, 0.85rem)',
                     transition: 'all 0.3s ease',
+                    whiteSpace: 'nowrap',
                   }}
                   onMouseEnter={(e) => {
                     e.target.style.background = 'rgba(244, 162, 97, 0.2)';
@@ -750,15 +796,16 @@ const PhotoGallery = ({ photos }) => {
               </div>
             </motion.div>
 
-            {/* Keyboard hint */}
+            {/* Keyboard hint - hide on mobile */}
             <div
               style={{
                 position: 'absolute',
-                bottom: '20px',
+                bottom: 'clamp(10px, 2vw, 20px)',
                 color: '#333',
-                fontSize: '0.7rem',
+                fontSize: 'clamp(0.5rem, 1.2vw, 0.7rem)',
                 fontWeight: 300,
                 letterSpacing: '1px',
+                display: window.innerWidth < 768 ? 'none' : 'block',
               }}
             >
               ← → to navigate • ESC to close

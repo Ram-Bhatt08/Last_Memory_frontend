@@ -19,7 +19,18 @@ const WishSection = () => {
   const [showTimer, setShowTimer] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [wishCount, setWishCount] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const timerRef = useRef(null);
+
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const mahadevImages = [
     "/src/assets/photos/mahadev.jpeg",
@@ -87,12 +98,13 @@ const WishSection = () => {
     if (showMahadev) {
       const newParticles = [];
       const divineSymbols = ['🕉️', '🔱', '🌙', '🙏', '✨', '🌟', '💫', '🌺', '🌸', '🪔'];
-      for (let i = 0; i < 50; i++) {
+      const count = isMobile ? 25 : 50;
+      for (let i = 0; i < count; i++) {
         newParticles.push({
           id: i,
           x: Math.random() * 100,
           y: Math.random() * 100,
-          size: Math.random() * 8 + 2,
+          size: Math.random() * (isMobile ? 5 : 8) + 2,
           duration: Math.random() * 4 + 3,
           delay: Math.random() * 3,
           type: divineSymbols[Math.floor(Math.random() * divineSymbols.length)]
@@ -123,7 +135,7 @@ const WishSection = () => {
         if (timerRef.current) clearInterval(timerRef.current);
       };
     }
-  }, [showMahadev]);
+  }, [showMahadev, isMobile]);
 
   const handleImageError = () => {
     setImageError(true);
@@ -176,6 +188,11 @@ const WishSection = () => {
           : 'rgba(255, 255, 255, 0.02)',
         transition: 'background 1.5s ease',
         borderColor: showMahadev ? 'rgba(233, 196, 106, 0.15)' : 'rgba(255, 255, 255, 0.04)',
+        borderRadius: 'clamp(16px, 3vw, 24px)',
+        padding: 'clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2.5rem)',
+        border: `1px solid ${showMahadev ? 'rgba(233, 196, 106, 0.15)' : 'rgba(255, 255, 255, 0.04)'}`,
+        maxWidth: 'min(800px, 95%)',
+        margin: '0 auto',
       }}
     >
       {/* Divine Glow Background */}
@@ -246,7 +263,7 @@ const WishSection = () => {
             left: '-2px',
             right: '-2px',
             bottom: '-2px',
-            borderRadius: '26px',
+            borderRadius: 'clamp(18px, 3.5vw, 26px)',
             background: 'linear-gradient(135deg, #e9c46a, #f4a261, #e76f51, #f4a261, #e9c46a)',
             backgroundSize: '300% 300%',
             animation: 'gradientBorder 3s ease-in-out infinite',
@@ -272,7 +289,7 @@ const WishSection = () => {
             display: 'block',
             textAlign: 'center',
             marginBottom: '0.5rem',
-            fontSize: '3.5rem',
+            fontSize: 'clamp(2.5rem, 6vw, 3.5rem)',
             filter: showMahadev ? 'drop-shadow(0 0 30px rgba(233, 196, 106, 0.3))' : 'none',
           }}
         >
@@ -285,6 +302,12 @@ const WishSection = () => {
           style={{
             color: showMahadev ? '#e9c46a' : '#e9c46a',
             textShadow: showMahadev ? '0 0 40px rgba(233, 196, 106, 0.15)' : 'none',
+            fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+            textAlign: 'center',
+            fontWeight: 300,
+            letterSpacing: 'clamp(1px, 0.3vw, 2px)',
+            margin: '0.5rem 0',
+            fontFamily: '"Georgia", serif',
           }}
           animate={{
             scale: showMahadev ? [1, 1.02, 1] : 1,
@@ -304,8 +327,8 @@ const WishSection = () => {
             animate={{ opacity: 1, scale: 1 }}
             style={{
               textAlign: 'center',
-              marginBottom: '1rem',
-              fontSize: '0.85rem',
+              marginBottom: 'clamp(0.8rem, 2vw, 1rem)',
+              fontSize: 'clamp(0.7rem, 1.6vw, 0.85rem)',
               color: '#555',
               fontFamily: '"Georgia", serif',
               letterSpacing: '1px',
@@ -322,11 +345,13 @@ const WishSection = () => {
           className="section-subtitle"
           style={{
             color: showMahadev ? '#f4a261' : '#888',
-            fontSize: showMahadev ? '1.1rem' : '0.95rem',
+            fontSize: showMahadev ? 'clamp(0.9rem, 2.2vw, 1.1rem)' : 'clamp(0.8rem, 2vw, 0.95rem)',
             fontWeight: showMahadev ? 400 : 300,
             maxWidth: '600px',
-            margin: '0 auto 1.5rem',
+            margin: '0 auto clamp(1rem, 3vw, 1.5rem)',
             lineHeight: 1.8,
+            textAlign: 'center',
+            padding: '0 0.5rem',
           }}
         >
           {showMahadev 
@@ -341,18 +366,19 @@ const WishSection = () => {
             animate={{ scale: 1, opacity: 1 }}
             style={{
               textAlign: 'center',
-              marginBottom: '1rem',
+              marginBottom: 'clamp(0.8rem, 2vw, 1rem)',
               color: '#e9c46a',
-              fontSize: '0.9rem',
+              fontSize: 'clamp(0.8rem, 1.8vw, 0.9rem)',
               fontWeight: 300,
               letterSpacing: '2px',
             }}
           >
             <span style={{ 
               background: 'rgba(233, 196, 106, 0.05)',
-              padding: '0.3rem 1.5rem',
+              padding: 'clamp(0.2rem, 1vw, 0.3rem) clamp(1rem, 2.5vw, 1.5rem)',
               borderRadius: '50px',
               border: '1px solid rgba(233, 196, 106, 0.1)',
+              display: 'inline-block',
             }}>
               ⏳ {timeLeft} seconds
             </span>
@@ -371,14 +397,14 @@ const WishSection = () => {
               style={{
                 display: 'flex',
                 justifyContent: 'center',
-                marginBottom: '1.5rem',
+                marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
               }}
             >
               <div
                 style={{
                   position: 'relative',
-                  width: '140px',
-                  height: '140px',
+                  width: 'clamp(100px, 25vw, 140px)',
+                  height: 'clamp(100px, 25vw, 140px)',
                   borderRadius: '50%',
                   padding: '6px',
                   background: 'linear-gradient(135deg, #e9c46a, #f4a261, #e76f51, #f4a261, #e9c46a)',
@@ -411,9 +437,10 @@ const WishSection = () => {
                         objectFit: 'cover',
                       }}
                       onError={handleImageError}
+                      loading="lazy"
                     />
                   ) : (
-                    <span style={{ fontSize: '4.5rem' }}>🔱</span>
+                    <span style={{ fontSize: 'clamp(3rem, 8vw, 4.5rem)' }}>🔱</span>
                   )}
                   
                   <div
@@ -462,7 +489,12 @@ const WishSection = () => {
         {/* Input Section */}
         {!showMahadev && (
           <div style={{ textAlign: 'center' }}>
-            <div style={{ position: 'relative', display: 'inline-block', width: '100%', maxWidth: '400px' }}>
+            <div style={{ 
+              position: 'relative', 
+              display: 'inline-block', 
+              width: '100%', 
+              maxWidth: 'min(400px, 100%)',
+            }}>
               <input
                 type="text"
                 value={wish}
@@ -472,15 +504,17 @@ const WishSection = () => {
                 disabled={submitted}
                 style={{
                   width: '100%',
-                  padding: '1rem 1.5rem',
+                  padding: 'clamp(0.8rem, 2vw, 1rem) clamp(1rem, 2.5vw, 1.5rem)',
+                  paddingRight: 'clamp(2.5rem, 5vw, 3rem)',
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(244, 162, 97, 0.15)',
                   borderRadius: '14px',
                   color: '#f0e6d3',
-                  fontSize: '1.1rem',
+                  fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
                   fontFamily: 'inherit',
                   outline: 'none',
                   transition: 'all 0.3s ease',
+                  boxSizing: 'border-box',
                 }}
                 onFocus={(e) => {
                   e.target.style.borderColor = '#f4a261';
@@ -495,10 +529,10 @@ const WishSection = () => {
               <div
                 style={{
                   position: 'absolute',
-                  right: '15px',
+                  right: 'clamp(10px, 2vw, 15px)',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  fontSize: '1.2rem',
+                  fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
                   opacity: 0.3,
                   pointerEvents: 'none',
                 }}
@@ -513,15 +547,15 @@ const WishSection = () => {
               onClick={handleSubmit}
               disabled={submitted}
               style={{
-                marginTop: '1.2rem',
-                padding: '0.8rem 3rem',
+                marginTop: 'clamp(1rem, 2.5vw, 1.2rem)',
+                padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(2rem, 5vw, 3rem)',
                 background: submitted
                   ? 'rgba(244, 162, 97, 0.3)'
                   : 'linear-gradient(135deg, #e9c46a, #f4a261)',
                 border: 'none',
                 borderRadius: '50px',
                 color: submitted ? '#666' : '#0f0e1a',
-                fontSize: '1.1rem',
+                fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
                 cursor: submitted ? 'default' : 'pointer',
                 fontFamily: 'inherit',
                 opacity: submitted ? 0.5 : 1,
@@ -529,6 +563,8 @@ const WishSection = () => {
                 boxShadow: submitted
                   ? 'none'
                   : '0 8px 30px rgba(233, 196, 106, 0.2)',
+                width: isMobile ? '100%' : 'auto',
+                maxWidth: isMobile ? 'min(400px, 100%)' : 'none',
               }}
             >
               {submitted ? '⏳ Mahadev ko bhej rahe...' : '🙏 Wish It'}
@@ -546,8 +582,8 @@ const WishSection = () => {
               exit={{ opacity: 0, y: -20, scale: 0.9 }}
               transition={{ type: 'spring', damping: 20 }}
               style={{
-                marginTop: '1.5rem',
-                padding: '1.5rem',
+                marginTop: 'clamp(1.2rem, 3vw, 1.5rem)',
+                padding: 'clamp(1rem, 2.5vw, 1.5rem)',
                 background: showMahadev
                   ? 'rgba(233, 196, 106, 0.06)'
                   : 'rgba(244, 162, 97, 0.04)',
@@ -566,8 +602,8 @@ const WishSection = () => {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '300px',
-                    height: '300px',
+                    width: 'clamp(150px, 40vw, 300px)',
+                    height: 'clamp(150px, 40vw, 300px)',
                     background: 'radial-gradient(circle at center, rgba(233, 196, 106, 0.03), transparent 70%)',
                     pointerEvents: 'none',
                   }}
@@ -577,12 +613,13 @@ const WishSection = () => {
               <p
                 style={{
                   color: showMahadev ? '#e9c46a' : '#e9c46a',
-                  fontSize: 'clamp(1.1rem, 2vw, 1.3rem)',
+                  fontSize: 'clamp(0.95rem, 2.2vw, 1.3rem)',
                   fontWeight: 300,
                   textAlign: 'center',
                   position: 'relative',
                   zIndex: 1,
                   lineHeight: 1.8,
+                  margin: 0,
                 }}
               >
                 {response}
@@ -596,7 +633,7 @@ const WishSection = () => {
                   style={{
                     textAlign: 'center',
                     marginTop: '0.8rem',
-                    fontSize: '2.5rem',
+                    fontSize: 'clamp(2rem, 5vw, 2.5rem)',
                     position: 'relative',
                     zIndex: 1,
                     letterSpacing: '8px',
@@ -613,13 +650,13 @@ const WishSection = () => {
         {!showMahadev && (
           <div
             style={{
-              marginTop: '1.5rem',
-              fontSize: '0.8rem',
+              marginTop: 'clamp(1.2rem, 3vw, 1.5rem)',
+              fontSize: 'clamp(0.65rem, 1.4vw, 0.8rem)',
               color: '#444',
               textAlign: 'center',
-              letterSpacing: '2px',
+              letterSpacing: 'clamp(1px, 0.3vw, 2px)',
               borderTop: '1px solid rgba(255,255,255,0.02)',
-              paddingTop: '1.2rem',
+              paddingTop: 'clamp(0.8rem, 2vw, 1.2rem)',
             }}
           >
             <span style={{ opacity: 0.5 }}>✦</span>
@@ -643,6 +680,12 @@ const WishSection = () => {
         @keyframes glowPulse {
           0%, 100% { opacity: 0.1; transform: scale(1); }
           50% { opacity: 0.4; transform: scale(1.08); }
+        }
+
+        @media (max-width: 480px) {
+          .section-card {
+            padding: 1.2rem 0.8rem !important;
+          }
         }
       `}</style>
     </motion.div>

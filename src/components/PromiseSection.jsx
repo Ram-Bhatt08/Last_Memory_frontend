@@ -13,23 +13,35 @@ const PromiseSection = ({ promises }) => {
   const [hoveredId, setHoveredId] = useState(null);
   const [floatingStars, setFloatingStars] = useState([]);
   const [sparkleIntensity, setSparkleIntensity] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Generate floating stars
   useEffect(() => {
     const stars = [];
-    for (let i = 0; i < 20; i++) {
+    const count = isMobile ? 10 : 20;
+    for (let i = 0; i < count; i++) {
       stars.push({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * 6 + 2,
+        size: Math.random() * (isMobile ? 4 : 6) + 2,
         duration: Math.random() * 4 + 3,
         delay: Math.random() * 3,
         type: ['✦', '✧', '🌟', '✨', '💫', '⭐'][Math.floor(Math.random() * 6)]
       });
     }
     setFloatingStars(stars);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -65,9 +77,9 @@ const PromiseSection = ({ promises }) => {
       animate={inView ? { opacity: 1, scale: 1 } : {}}
       transition={{ duration: 0.8, type: 'spring', damping: 20 }}
       style={{
-        maxWidth: '900px',
-        margin: '4rem auto',
-        padding: '0 1rem',
+        maxWidth: 'min(900px, 95%)',
+        margin: 'clamp(2rem, 6vw, 4rem) auto',
+        padding: '0 clamp(0.5rem, 2vw, 1rem)',
         position: 'relative',
       }}
     >
@@ -129,8 +141,8 @@ const PromiseSection = ({ promises }) => {
           background: `
             linear-gradient(180deg, rgba(10, 10, 26, 0.95) 0%, rgba(20, 10, 30, 0.95) 50%, rgba(10, 10, 26, 0.95) 100%)
           `,
-          borderRadius: '30px',
-          padding: '3rem 2.5rem 2.5rem',
+          borderRadius: 'clamp(20px, 3vw, 30px)',
+          padding: 'clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.5rem)',
           border: '1px solid rgba(233, 196, 106, 0.1)',
           boxShadow: `
             0 30px 80px rgba(0,0,0,0.6),
@@ -165,7 +177,7 @@ const PromiseSection = ({ promises }) => {
         />
 
         {/* ===== MAGICAL BORDER PARTICLES ===== */}
-        {[...Array(8)].map((_, i) => (
+        {!isMobile && [...Array(8)].map((_, i) => (
           <motion.div
             key={i}
             animate={{
@@ -199,15 +211,16 @@ const PromiseSection = ({ promises }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2 }}
-            style={{ textAlign: 'center', marginBottom: '2rem' }}
+            style={{ textAlign: 'center', marginBottom: 'clamp(1.5rem, 4vw, 2rem)' }}
           >
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '1rem',
+                gap: 'clamp(0.5rem, 2vw, 1rem)',
                 marginBottom: '0.5rem',
+                flexWrap: 'wrap',
               }}
             >
               <motion.span
@@ -219,11 +232,11 @@ const PromiseSection = ({ promises }) => {
                   repeat: Infinity,
                   ease: 'linear',
                 }}
-                style={{ fontSize: '2rem' }}
+                style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)' }}
               >
                 ✧
               </motion.span>
-              <span style={{ fontSize: '2.5rem' }}>🔮</span>
+              <span style={{ fontSize: 'clamp(2rem, 5vw, 2.5rem)' }}>🔮</span>
               <motion.span
                 animate={{
                   rotate: [360, 0],
@@ -233,7 +246,7 @@ const PromiseSection = ({ promises }) => {
                   repeat: Infinity,
                   ease: 'linear',
                 }}
-                style={{ fontSize: '2rem' }}
+                style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)' }}
               >
                 ✧
               </motion.span>
@@ -244,15 +257,16 @@ const PromiseSection = ({ promises }) => {
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: 0.3, type: 'spring' }}
               style={{
-                fontSize: 'clamp(2rem, 4vw, 2.8rem)',
+                fontSize: 'clamp(1.5rem, 5vw, 2.8rem)',
                 fontWeight: 300,
                 background: 'linear-gradient(135deg, #e9c46a, #f4a261, #e76f51, #f4a261, #e9c46a)',
                 backgroundSize: '300% 300%',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 animation: 'gradientMove 4s ease-in-out infinite',
-                letterSpacing: '4px',
+                letterSpacing: 'clamp(2px, 0.5vw, 4px)',
                 fontFamily: '"Georgia", serif',
+                margin: 0,
               }}
             >
               ✦ Mystical Vows ✦
@@ -264,9 +278,9 @@ const PromiseSection = ({ promises }) => {
               transition={{ delay: 0.5 }}
               style={{
                 color: '#888',
-                fontSize: '1rem',
+                fontSize: 'clamp(0.75rem, 2vw, 1rem)',
                 fontWeight: 300,
-                letterSpacing: '3px',
+                letterSpacing: 'clamp(1px, 0.3vw, 3px)',
                 fontFamily: '"Georgia", serif',
                 marginTop: '0.3rem',
               }}
@@ -281,8 +295,8 @@ const PromiseSection = ({ promises }) => {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.6 }}
             style={{
-              marginBottom: '2rem',
-              padding: '1rem 1.5rem',
+              marginBottom: 'clamp(1.5rem, 3vw, 2rem)',
+              padding: 'clamp(0.8rem, 2vw, 1rem) clamp(1rem, 2.5vw, 1.5rem)',
               background: 'rgba(255,255,255,0.02)',
               borderRadius: '14px',
               border: '1px solid rgba(255,255,255,0.03)',
@@ -292,7 +306,7 @@ const PromiseSection = ({ promises }) => {
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                fontSize: '0.85rem',
+                fontSize: 'clamp(0.7rem, 1.6vw, 0.85rem)',
                 color: '#666',
                 marginBottom: '0.5rem',
                 fontFamily: '"Georgia", serif',
@@ -316,7 +330,7 @@ const PromiseSection = ({ promises }) => {
             <div
               style={{
                 width: '100%',
-                height: '6px',
+                height: 'clamp(4px, 1vw, 6px)',
                 background: 'rgba(255,255,255,0.03)',
                 borderRadius: '10px',
                 overflow: 'hidden',
@@ -352,7 +366,7 @@ const PromiseSection = ({ promises }) => {
           </motion.div>
 
           {/* ===== PROMISE CARDS ===== */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(0.6rem, 1.5vw, 0.8rem)' }}>
             {promises.map((promise, index) => {
               const isAnswered = responses[promise.id] !== undefined;
               const isAccepted = responses[promise.id] === true;
@@ -364,7 +378,7 @@ const PromiseSection = ({ promises }) => {
                   initial={{ opacity: 0, x: -30, rotateY: -5 }}
                   animate={inView ? { opacity: 1, x: 0, rotateY: 0 } : {}}
                   transition={{ delay: index * 0.06, type: 'spring', damping: 20 }}
-                  whileHover={{ scale: 1.02, x: 5 }}
+                  whileHover={{ scale: isMobile ? 1 : 1.02, x: isMobile ? 0 : 5 }}
                   onHoverStart={() => setHoveredId(promise.id)}
                   onHoverEnd={() => setHoveredId(null)}
                   style={{
@@ -382,12 +396,13 @@ const PromiseSection = ({ promises }) => {
                         ? 'rgba(233, 196, 106, 0.2)'
                         : 'rgba(255,255,255,0.03)'
                     }`,
-                    borderRadius: '14px',
-                    padding: '1rem 1.5rem',
+                    borderRadius: 'clamp(12px, 1.5vw, 14px)',
+                    padding: 'clamp(0.8rem, 1.5vw, 1rem) clamp(1rem, 2vw, 1.5rem)',
                     display: 'flex',
-                    alignItems: 'center',
+                    flexDirection: isMobile ? 'column' : 'row',
+                    alignItems: isMobile ? 'stretch' : 'center',
                     justifyContent: 'space-between',
-                    gap: '1rem',
+                    gap: 'clamp(0.8rem, 2vw, 1rem)',
                     flexWrap: 'wrap',
                     transition: 'all 0.4s ease',
                     position: 'relative',
@@ -416,20 +431,22 @@ const PromiseSection = ({ promises }) => {
                   <div
                     style={{
                       display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.8rem',
+                      alignItems: 'flex-start',
+                      gap: 'clamp(0.5rem, 1.5vw, 0.8rem)',
                       flex: 1,
                       position: 'relative',
                       zIndex: 1,
+                      minWidth: '0',
                     }}
                   >
                     <span
                       style={{
-                        fontSize: '0.8rem',
+                        fontSize: 'clamp(0.7rem, 1.4vw, 0.8rem)',
                         color: isAnswered ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)',
                         fontFamily: '"Georgia", serif',
-                        minWidth: '25px',
+                        minWidth: 'clamp(20px, 3vw, 25px)',
                         textAlign: 'center',
+                        flexShrink: 0,
                       }}
                     >
                       {String(index + 1).padStart(2, '0')}
@@ -438,10 +455,12 @@ const PromiseSection = ({ promises }) => {
                     <p
                       style={{
                         color: isAnswered ? (isAccepted ? '#2a9d8f' : '#e76f51') : '#d4cbc4',
-                        fontSize: '1rem',
+                        fontSize: 'clamp(0.85rem, 1.8vw, 1rem)',
                         fontWeight: 300,
                         margin: 0,
                         fontFamily: '"Georgia", serif',
+                        wordBreak: 'break-word',
+                        flex: 1,
                       }}
                     >
                       {isAnswered && (
@@ -458,9 +477,12 @@ const PromiseSection = ({ promises }) => {
                     <div
                       style={{
                         display: 'flex',
-                        gap: '0.5rem',
+                        gap: 'clamp(0.4rem, 1vw, 0.5rem)',
                         position: 'relative',
                         zIndex: 1,
+                        flexWrap: 'wrap',
+                        justifyContent: isMobile ? 'center' : 'flex-end',
+                        width: isMobile ? '100%' : 'auto',
                       }}
                     >
                       <motion.button
@@ -468,16 +490,19 @@ const PromiseSection = ({ promises }) => {
                         whileTap={{ scale: 0.95 }}
                         onClick={() => handleResponse(promise.id, true)}
                         style={{
-                          padding: '0.3rem 1.2rem',
+                          padding: 'clamp(0.2rem, 1vw, 0.3rem) clamp(0.8rem, 2vw, 1.2rem)',
                           background: 'rgba(42, 157, 143, 0.08)',
                           border: '1px solid rgba(42, 157, 143, 0.15)',
                           borderRadius: '50px',
                           color: '#2a9d8f',
                           cursor: 'pointer',
                           fontFamily: '"Georgia", serif',
-                          fontSize: '0.85rem',
+                          fontSize: 'clamp(0.75rem, 1.6vw, 0.85rem)',
                           transition: 'all 0.3s ease',
                           letterSpacing: '1px',
+                          flex: isMobile ? 1 : 'none',
+                          minWidth: isMobile ? '80px' : 'auto',
+                          touchAction: 'manipulation',
                         }}
                       >
                         ✦ Bind
@@ -487,16 +512,19 @@ const PromiseSection = ({ promises }) => {
                         whileTap={{ scale: 0.95 }}
                         onClick={() => handleResponse(promise.id, false)}
                         style={{
-                          padding: '0.3rem 1.2rem',
+                          padding: 'clamp(0.2rem, 1vw, 0.3rem) clamp(0.8rem, 2vw, 1.2rem)',
                           background: 'rgba(231, 111, 81, 0.08)',
                           border: '1px solid rgba(231, 111, 81, 0.15)',
                           borderRadius: '50px',
                           color: '#e76f51',
                           cursor: 'pointer',
                           fontFamily: '"Georgia", serif',
-                          fontSize: '0.85rem',
+                          fontSize: 'clamp(0.75rem, 1.6vw, 0.85rem)',
                           transition: 'all 0.3s ease',
                           letterSpacing: '1px',
+                          flex: isMobile ? 1 : 'none',
+                          minWidth: isMobile ? '80px' : 'auto',
+                          touchAction: 'manipulation',
                         }}
                       >
                         ✧ Release
@@ -508,16 +536,18 @@ const PromiseSection = ({ promises }) => {
                       animate={{ scale: 1, rotate: 0 }}
                       transition={{ type: 'spring', damping: 15 }}
                       style={{
-                        fontSize: '0.8rem',
+                        fontSize: 'clamp(0.7rem, 1.4vw, 0.8rem)',
                         color: isAccepted ? '#2a9d8f' : '#e76f51',
                         fontFamily: '"Georgia", serif',
                         fontStyle: 'italic',
-                        padding: '0.2rem 1rem',
+                        padding: 'clamp(0.15rem, 0.8vw, 0.2rem) clamp(0.8rem, 1.5vw, 1rem)',
                         background: isAccepted
                           ? 'rgba(42, 157, 143, 0.05)'
                           : 'rgba(231, 111, 81, 0.05)',
                         borderRadius: '50px',
                         border: `1px solid ${isAccepted ? 'rgba(42, 157, 143, 0.1)' : 'rgba(231, 111, 81, 0.1)'}`,
+                        whiteSpace: 'nowrap',
+                        alignSelf: isMobile ? 'center' : 'auto',
                       }}
                     >
                       {isAccepted ? '✦ Bound' : '✧ Released'}
@@ -537,10 +567,10 @@ const PromiseSection = ({ promises }) => {
                 exit={{ opacity: 0, scale: 0.8, y: -30 }}
                 transition={{ type: 'spring', damping: 15, duration: 0.8 }}
                 style={{
-                  marginTop: '2rem',
-                  padding: '2rem',
+                  marginTop: 'clamp(1.5rem, 3vw, 2rem)',
+                  padding: 'clamp(1.5rem, 3vw, 2rem)',
                   background: 'rgba(255,255,255,0.02)',
-                  borderRadius: '18px',
+                  borderRadius: 'clamp(14px, 2vw, 18px)',
                   border: '1px solid rgba(233, 196, 106, 0.08)',
                   textAlign: 'center',
                   position: 'relative',
@@ -564,8 +594,8 @@ const PromiseSection = ({ promises }) => {
                   }}
                 />
 
-                {/* Floating magical symbols */}
-                {['✦', '✧', '🌟', '💫', '✨'].map((symbol, i) => (
+                {/* Floating magical symbols - reduce on mobile */}
+                {!isMobile && ['✦', '✧', '🌟', '💫', '✨'].map((symbol, i) => (
                   <motion.div
                     key={i}
                     initial={{ y: 0, opacity: 0 }}
@@ -583,7 +613,7 @@ const PromiseSection = ({ promises }) => {
                     }}
                     style={{
                       position: 'absolute',
-                      fontSize: '1.2rem',
+                      fontSize: 'clamp(1rem, 2vw, 1.2rem)',
                       color: '#e9c46a',
                       pointerEvents: 'none',
                       opacity: 0,
@@ -597,7 +627,12 @@ const PromiseSection = ({ promises }) => {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: 'spring' }}
-                  style={{ fontSize: '3.5rem', marginBottom: '0.5rem', position: 'relative', zIndex: 1 }}
+                  style={{ 
+                    fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', 
+                    marginBottom: '0.5rem', 
+                    position: 'relative', 
+                    zIndex: 1 
+                  }}
                 >
                   {magicLevel >= 80 ? '🌟' : magicLevel >= 50 ? '🔮' : '💫'}
                 </motion.div>
@@ -609,11 +644,12 @@ const PromiseSection = ({ promises }) => {
                   style={{
                     color: '#e9c46a',
                     fontWeight: 300,
-                    fontSize: '1.2rem',
+                    fontSize: 'clamp(0.9rem, 2.2vw, 1.2rem)',
                     fontFamily: '"Georgia", serif',
                     lineHeight: 1.8,
                     position: 'relative',
                     zIndex: 1,
+                    padding: '0 0.5rem',
                   }}
                 >
                   {magicLevel === 100
@@ -631,7 +667,7 @@ const PromiseSection = ({ promises }) => {
                   transition={{ delay: 0.6, type: 'spring' }}
                   style={{
                     marginTop: '0.8rem',
-                    padding: '0.5rem 1.5rem',
+                    padding: 'clamp(0.3rem, 1vw, 0.5rem) clamp(1rem, 2.5vw, 1.5rem)',
                     display: 'inline-block',
                     background: 'rgba(233, 196, 106, 0.04)',
                     borderRadius: '50px',
@@ -643,10 +679,10 @@ const PromiseSection = ({ promises }) => {
                   <p
                     style={{
                       color: '#888',
-                      fontSize: '0.8rem',
+                      fontSize: 'clamp(0.65rem, 1.4vw, 0.8rem)',
                       margin: 0,
                       fontFamily: '"Georgia", serif',
-                      letterSpacing: '2px',
+                      letterSpacing: 'clamp(1px, 0.3vw, 2px)',
                     }}
                   >
                     {accepted}/{total} bonds forged • {magicLevel}% magic
@@ -662,14 +698,14 @@ const PromiseSection = ({ promises }) => {
             animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.8 }}
             style={{
-              marginTop: '2rem',
+              marginTop: 'clamp(1.5rem, 3vw, 2rem)',
               textAlign: 'center',
               fontFamily: '"Georgia", serif',
               color: '#444',
-              fontSize: '0.8rem',
-              letterSpacing: '3px',
+              fontSize: 'clamp(0.65rem, 1.4vw, 0.8rem)',
+              letterSpacing: 'clamp(1px, 0.3vw, 3px)',
               borderTop: '1px solid rgba(255,255,255,0.02)',
-              paddingTop: '1.2rem',
+              paddingTop: 'clamp(0.8rem, 2vw, 1.2rem)',
             }}
           >
             <span style={{ color: '#555' }}>✦</span>
@@ -692,6 +728,15 @@ const PromiseSection = ({ promises }) => {
           @keyframes magicAura {
             0%, 100% { transform: scale(1) rotate(0deg); }
             50% { transform: scale(1.1) rotate(5deg); }
+          }
+
+          @media (max-width: 480px) {
+            .promise-card {
+              padding: 0.8rem !important;
+            }
+            .promise-text {
+              font-size: 0.85rem !important;
+            }
           }
         `}</style>
       </motion.div>

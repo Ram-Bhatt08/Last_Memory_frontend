@@ -96,7 +96,7 @@ Hamesa khush rahena and kabhi bhul mat jana Miss you. 
     { id: 53, url: "/photos/53.jpeg", caption: "Biharan ka sign" },
     { id: 54, url: "/photos/54.jpeg", caption: "Yetna bada jhoot" },
     { id: 64, url: "/photos/64.jpeg", caption: "Kabhi kabhi log sach bol dete hai" },
-    {id: 82, url: "/photos/82.jpeg", caption: "Tumre 2nd year ki DP" },
+    {id: 82, url: "/photos/82.jpeg", caption: "Yehe wo mod tha jaha se hamare dosti almost khatam ho gaye thi." },
     { id: 55, url: "/photos/55.jpeg", caption: "Dheko tume kuch dhekta hu kar k kise ne ss bhej tha" },
     { id: 56, url: "/photos/56.jpeg", caption: "First year 2nd semester" },
     { id: 57, url: "/photos/57.jpeg", caption: "Aab toh google photos bhi jhanta hai kon hai ye kar k" },
