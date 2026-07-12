@@ -41,8 +41,8 @@ Hamesa khush rahena and kabhi bhul mat jana Miss you. 
 `,
 
   photos: [
-    { id: 1, url: "/public/photos/1.jpeg",caption: "meri cute se biharan class 10 wali photo."},
-    { id: 2, url: "/public/photos/2.jpeg", caption: "Hackthon winner the coder malika" },
+    { id: 1, url: "/photos/1.jpeg",caption: "meri cute se biharan class 10 wali photo."},
+    { id: 2, url: "/photos/2.jpeg", caption: "Hackthon winner the coder malika" },
     { id: 3, url: "/public/photos/3.jpeg", caption: "Photo toh kab ki hai yaad nahi hai lekin memory hai." },
     { id: 4, url: "/public/photos/4.jpeg", caption: "Malika ka 3rd year wala group.Tumre law wali didi" },
     { id: 5, url: "/public/photos/5.jpeg", caption: "Biharan ki DP Insta + whatsapp" },
