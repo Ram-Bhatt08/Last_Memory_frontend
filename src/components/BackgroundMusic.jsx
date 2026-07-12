@@ -7,8 +7,19 @@ const BackgroundMusic = ({ songUrl }) => {
   const [showMessage, setShowMessage] = useState(false);
   const [messageDismissed, setMessageDismissed] = useState(false);
   const [volume, setVolume] = useState(0.7);
+  const [isMobile, setIsMobile] = useState(false);
   const audioRef = useRef(null);
   const messageTimeoutRef = useRef(null);
+
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (songUrl) {
@@ -108,12 +119,13 @@ const BackgroundMusic = ({ songUrl }) => {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               zIndex: 10000,
-              maxWidth: '450px',
+              maxWidth: isMobile ? 'min(400px, 90%)' : '450px',
               width: '90%',
-              padding: '2.5rem 2rem',
+              padding: isMobile ? '1.8rem 1.2rem' : '2.5rem 2rem',
               background: 'linear-gradient(145deg, rgba(10, 10, 26, 0.95), rgba(20, 10, 30, 0.95))',
               backdropFilter: 'blur(30px)',
-              borderRadius: '24px',
+              WebkitBackdropFilter: 'blur(30px)',
+              borderRadius: isMobile ? '18px' : '24px',
               border: '1px solid rgba(233, 196, 106, 0.15)',
               boxShadow: '0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(233, 196, 106, 0.03)',
               textAlign: 'center',
@@ -132,8 +144,8 @@ const BackgroundMusic = ({ songUrl }) => {
               }}
             />
 
-            {/* Floating musical notes */}
-            {['🎵', '🎶', '🎵', '🎶', '🎵'].map((note, i) => (
+            {/* Floating musical notes - fewer on mobile */}
+            {!isMobile && ['🎵', '🎶', '🎵', '🎶', '🎵'].map((note, i) => (
               <motion.div
                 key={i}
                 initial={{ y: 0, opacity: 0 }}
@@ -163,6 +175,37 @@ const BackgroundMusic = ({ songUrl }) => {
               </motion.div>
             ))}
 
+            {/* Mobile - fewer floating notes */}
+            {isMobile && ['🎵', '🎶', '🎵'].map((note, i) => (
+              <motion.div
+                key={i}
+                initial={{ y: 0, opacity: 0 }}
+                animate={{
+                  y: [-15, -40, -70],
+                  x: [0, (Math.random() - 0.5) * 40, (Math.random() - 0.5) * 50],
+                  opacity: [0, 1, 0],
+                  scale: [0.5, 1.2, 0.5],
+                  rotate: [0, 360],
+                }}
+                transition={{
+                  duration: 2.5,
+                  delay: i * 0.4,
+                  repeat: Infinity,
+                }}
+                style={{
+                  position: 'absolute',
+                  fontSize: '1.2rem',
+                  color: '#e9c46a',
+                  pointerEvents: 'none',
+                  opacity: 0,
+                  top: `${25 + i * 15}%`,
+                  left: `${15 + i * 25}%`,
+                }}
+              >
+                {note}
+              </motion.div>
+            ))}
+
             <div style={{ position: 'relative', zIndex: 1 }}>
               {/* Heart emoji */}
               <motion.div
@@ -174,7 +217,7 @@ const BackgroundMusic = ({ songUrl }) => {
                   repeat: Infinity,
                 }}
                 style={{
-                  fontSize: '3.5rem',
+                  fontSize: isMobile ? '2.8rem' : '3.5rem',
                   marginBottom: '0.5rem',
                 }}
               >
@@ -183,7 +226,7 @@ const BackgroundMusic = ({ songUrl }) => {
 
               <h2
                 style={{
-                  fontSize: '1.8rem',
+                  fontSize: isMobile ? 'clamp(1.3rem, 5vw, 1.6rem)' : '1.8rem',
                   fontWeight: 300,
                   background: 'linear-gradient(135deg, #e9c46a, #f4a261, #e76f51)',
                   backgroundSize: '200% 200%',
@@ -200,35 +243,40 @@ const BackgroundMusic = ({ songUrl }) => {
               <p
                 style={{
                   color: '#d4cbc4',
-                  fontSize: '1.1rem',
+                  fontSize: isMobile ? 'clamp(0.9rem, 2.5vw, 1rem)' : '1.1rem',
                   fontWeight: 300,
                   lineHeight: 1.8,
                   fontFamily: '"Georgia", serif',
                   marginBottom: '1.5rem',
+                  padding: '0 0.5rem',
                 }}
               >
                 Dedicated to the most beautiful soul I know... 🧡
                 <br />
-                <span style={{ color: '#888', fontSize: '0.9rem' }}>
+                <span style={{ color: '#888', fontSize: isMobile ? '0.8rem' : '0.9rem' }}>
                   This melody is just for you, Biharan ✨
                 </span>
               </p>
 
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: isMobile ? 1 : 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={dismissMessage}
                 style={{
-                  padding: '0.5rem 2.5rem',
+                  padding: isMobile 
+                    ? 'clamp(0.4rem, 2vw, 0.5rem) clamp(1.5rem, 5vw, 2rem)' 
+                    : '0.5rem 2.5rem',
                   background: 'rgba(233, 196, 106, 0.1)',
                   border: '1px solid rgba(233, 196, 106, 0.2)',
                   borderRadius: '50px',
                   color: '#e9c46a',
                   cursor: 'pointer',
                   fontFamily: '"Georgia", serif',
-                  fontSize: '0.95rem',
+                  fontSize: isMobile ? 'clamp(0.8rem, 2vw, 0.9rem)' : '0.95rem',
                   transition: 'all 0.3s ease',
                   letterSpacing: '1px',
+                  width: isMobile ? '100%' : 'auto',
+                  maxWidth: isMobile ? 'min(280px, 100%)' : 'none',
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.background = 'rgba(233, 196, 106, 0.2)';
@@ -255,14 +303,16 @@ const BackgroundMusic = ({ songUrl }) => {
       <motion.button
         onClick={togglePlay}
         disabled={!isLoaded}
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: isMobile ? 1 : 1.05 }}
         whileTap={{ scale: 0.95 }}
         style={{
           position: 'fixed',
-          bottom: '20px',
-          right: '20px',
+          bottom: isMobile ? 'clamp(10px, 3vw, 15px)' : '20px',
+          right: isMobile ? 'clamp(10px, 3vw, 15px)' : '20px',
           zIndex: 999,
-          padding: '0.8rem 1.5rem',
+          padding: isMobile 
+            ? 'clamp(0.5rem, 2vw, 0.6rem) clamp(0.8rem, 3vw, 1rem)' 
+            : '0.8rem 1.5rem',
           background: isPlaying 
             ? 'rgba(233, 196, 106, 0.12)' 
             : 'rgba(255, 255, 255, 0.03)',
@@ -275,26 +325,33 @@ const BackgroundMusic = ({ songUrl }) => {
           color: isPlaying ? '#e9c46a' : '#666',
           cursor: isLoaded ? 'pointer' : 'default',
           fontFamily: '"Georgia", serif',
-          fontSize: '0.85rem',
+          fontSize: isMobile ? 'clamp(0.65rem, 2vw, 0.75rem)' : '0.85rem',
           backdropFilter: 'blur(15px)',
+          WebkitBackdropFilter: 'blur(15px)',
           transition: 'all 0.3s ease',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.6rem',
+          gap: isMobile ? '0.4rem' : '0.6rem',
           opacity: isLoaded ? 1 : 0.3,
           boxShadow: isPlaying 
             ? '0 0 30px rgba(233, 196, 106, 0.05)' 
             : 'none',
+          maxWidth: isMobile ? 'calc(100% - 40px)' : 'none',
+          whiteSpace: 'nowrap',
         }}
       >
-        <span style={{ fontSize: '1.1rem' }}>
+        <span style={{ 
+          fontSize: isMobile ? 'clamp(0.8rem, 2.5vw, 0.9rem)' : '1.1rem' 
+        }}>
           {isPlaying ? '🎵' : isLoaded ? '🎧' : '⏳'}
         </span>
-        <span>
+        <span style={{ 
+          fontSize: isMobile ? 'clamp(0.6rem, 1.8vw, 0.7rem)' : 'inherit' 
+        }}>
           {isPlaying 
-            ? '✨ Playing' 
+            ? isMobile ? '✨ Playing' : '✨ Playing' 
             : isLoaded 
-              ? 'Play Song 🧡' 
+              ? isMobile ? '🎵 Play' : 'Play Song 🧡' 
               : 'Loading...'
           }
         </span>
@@ -307,7 +364,10 @@ const BackgroundMusic = ({ songUrl }) => {
               duration: 1.5,
               repeat: Infinity,
             }}
-            style={{ fontSize: '0.7rem', color: '#e9c46a' }}
+            style={{ 
+              fontSize: isMobile ? '0.5rem' : '0.7rem', 
+              color: '#e9c46a' 
+            }}
           >
             ●
           </motion.span>
@@ -318,4 +378,3 @@ const BackgroundMusic = ({ songUrl }) => {
 };
 
 export default BackgroundMusic;
-
