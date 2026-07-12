@@ -833,7 +833,7 @@ const Message = ({ letter, onOpen }) => {
                 letterSpacing: '2px',
               }}
             >
-              ✧ Biharan ✧
+              ✧ Bhoomi Bestiiii🫣 ✧
             </motion.div>
             <div style={{ 
               fontSize: '0.7rem', 
